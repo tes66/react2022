@@ -1,26 +1,33 @@
-import logo from './logo.svg';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import Message from './Message';
+import Message from './components/Message';
 
-function App() {
+
+function App(props) {
+  const [MessageList, setMessageList] = useState([]);
+
+  function NewMessage(pm) {
+    setMessageList(MessageList => [...MessageList, {text: pm, autor: 'Men'}])
+    
+  }
+
+  useEffect(()=> {
+    if (MessageList[MessageList.length - 1]?.autor === 'Men') {
+     setTimeout(setMessageList, 1500, (MessageList => [...MessageList, {text: 'i\'robot?', autor: 'ME'}]))
+    };
+  }, [MessageList]);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <Message name="GeekBrains"/>
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <div className="App">
+      <Message name= {props.name}
+      onClick = {NewMessage}/>
+      <div>
+        <div className="Message-chat"><div className="Message-number">#</div><div className="Message-body">сообщения</div><div className="Message-autor">Автор</div></div>
+        {MessageList.map((message, idx) => <div className="Message-chat" key={idx + 1}> <div className="Message-number">{idx + 1}</div> <div className="Message-body"> {message.text} </div> <div className="Message-autor"> {message.autor} </div> </div>)}
+      </div>
+ </div>
+  
   );
 }
 
